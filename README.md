@@ -1,88 +1,90 @@
-1)Create an ER diagram for the given airlines database.
+# Air Cargo Analysis
 
-![image](https://github.com/user-attachments/assets/df8702d0-295f-40c4-abbb-934e63b3f2d2)
+# 1. Write a query to display all the passengers (customers) who have travelled in routes 01 to 25.
+select first_name,last_name,route_id from customer c join passengers_on_flights p
+on c.customer_id = p.customer_id
+where route_id between 1 and 25;
 
-2)Write a query to create route_details table using suitable data types for the fields, such as route_id, flight_num, origin_airport, destination_airport, aircraft_id, and distance_miles. Implement the check constraint for the flight number and unique constraint for the route_id fields. Also, make sure that the distance miles field is greater than 0.
+# 2. Write a query to identify the number of passengers and total revenue in business class.
+select COUNT(*) as no_of_passengers,SUM(price_per_ticket) as total_revenue
+from ticket_details
+where class_id = 'Bussiness';
 
-![image](https://github.com/user-attachments/assets/8a5f865f-9579-43e5-b8a8-b0475015c4e0)
+# 3. Write a query to display the full name of the customer by extracting the first name and last name.
+select CONCAT(first_name,' ',last_name) as full_name from customer;
 
-3) Write a query to display all the passengers (customers) who have travelled in routes 01 to 25. Take data  from the passengers_on_flights table.
+# 4. Write a query to extract the customers who have registered and booked a ticket. Use data from the customer and ticket_details tables.
+select c. customer_id, t. no_of_tickets, t. class_id 
+from customer c join ticket_details t
+on c. customer_id = t. customer_id
+where no_of_tickets > 0;
 
-![image](https://github.com/user-attachments/assets/8ec24367-284b-41b7-9988-7e616c0ade97)
+# 5. Write a query to identify the customer’s first name and last name based on their customer ID and brand (Emirates).
+select first_name,last_name from customer
+where customer_id in (select customer_id from ticket_details where brand = 'Emirates');
 
-4)Write a query to identify the number of passengers and total revenue in business class from the ticket_details table.
+# 6. Write a query to identify the customers who have travelled by Economy Plus class using Group By and Having clause.
+select COUNT(*) as no_of_customers
+from passengers_on_flights
+group by class_id
+having class_id = 'Economy Plus';
 
-![image](https://github.com/user-attachments/assets/271c346a-7710-46d9-927c-97057f1bc30f)
+# 7. Write a query to identify whether the revenue has crossed 10000 using the IF clause.
+select revenue,IIF(revenue > 10000, 'Yes','No') as revenue_crossed from 
+(select sum(no_of_tickets*Price_per_ticket) as revenue
+from ticket_details)a;
 
-5)Write a query to display the full name of the customer by extracting the first name and last name from the customer table.
+# 8. Write a query to find the maximum ticket price for each class using window functions.
+select class_id, MAX(price_per_ticket) as max_price 
+from ticket_details
+group by class_id;
 
-![image](https://github.com/user-attachments/assets/293052f4-7fe9-49eb-9554-07135f4c2cb5)
+# 9. Write a query to extract the passengers whose route ID is 4 by improving the speed and performance of the passengers_on_flights table.
+create index passengers on passengers_on_flights
+(route_id);
 
-6)Write a query to extract the customers who have registered and booked a ticket. Use data from the customer and ticket_details tables.
+SELECT c.customer_id, c.first_name, c.last_name, p.aircraft_id, p.route_id
+FROM customer c
+INNER JOIN passengers_on_flights p ON c.customer_id = p.customer_id
+WHERE p.route_id = 4;
 
-![image](https://github.com/user-attachments/assets/3100f2b8-d8af-40f6-8335-f587c98ab036)
+# 10. For the route ID 4, write a query to view the execution plan of the passengers_on_flights table.
+create view execution_plan as
+select * from passengers_on_flights
+where route_id = 4;
 
-7)Write a query to identify the customer’s first name and last name based on their customer ID and brand (Emirates) from the ticket_details table.
+select * from execution_plan;
 
-![image](https://github.com/user-attachments/assets/d8c05681-4c7c-4260-8005-cc2d4eb9f002)
+# 11. Write a query to calculate the total price of all tickets booked by a customer across different aircraft IDs using rollup function.
+select aircraft_id,SUM(no_of_tickets*price_per_ticket) as total_price
+from ticket_details
+group by aircraft_id;
 
-8)Write a query to identify the customers who have travelled by Economy Plus class using Group By and Having clause on the passengers_on_flights table.
+# 12. Write a query to create a view with only business class customers along with the brand of airlines.
+create view business_class as
+select c.first_name,c.last_name,t.brand from ticket_details t join customer c
+on t.customer_id = c.customer_id
+where class_id = 'Bussiness';
 
-![image](https://github.com/user-attachments/assets/7460b277-a8e0-4233-a581-dbc0ec7b1631)
+select * from business_class;
 
-9) Write a query to identify whether the revenue has crossed 10000 using the IF clause on the ticket_details table.
+# 13. Write a query to extracts all the details from the routes table where the travelled distance is more than 2000 miles
+select * from routes
+where distance_miles > 2000;
 
-![image](https://github.com/user-attachments/assets/7aa65a67-16b3-4a44-9cca-927ea1522f37)
-
-10) Write a query to find the maximum ticket price for each class using window functions on the ticket_details table.
-
-![image](https://github.com/user-attachments/assets/64198308-1ffe-4c1c-a90b-cd862868055a)
-
-11) Write a query to extract the passengers whose route ID is 4 by improving the speed and performance of the passengers_on_flights table.
-
-![image](https://github.com/user-attachments/assets/5b078da9-5fb3-40df-afa0-d1367d625a07)
-
-12) For the route ID 4, write a query to view the execution plan of the passengers_on_flights table.
-
-![image](https://github.com/user-attachments/assets/3896469e-ec89-4e66-8a8c-c81907b80d63)
-
-13) Write a query to calculate the total price of all tickets booked by a customer across different aircraft IDs using rollup function.
-
-![image](https://github.com/user-attachments/assets/4d14e118-923f-498f-8ac2-03bd27436f23)
-
-14) Write a query to create a view with only business class customers along with the brand of airlines.
-
-![image](https://github.com/user-attachments/assets/b5de1d9f-f75e-41f4-b2d7-90edc802c370)
-
-15) Write a query to extracts all the details from the routes table where the travelled distance is more than 2000 miles.
-
-![image](https://github.com/user-attachments/assets/30b23a84-5286-43c8-b2d5-9f71f35913ff)
-
-16) Write a query to create a new column that shows the distance travelled by each flight into three categories.The categories are, short distance travel (SDT) for >=0 
+# 14. Write a query to create a new column that shows the distance travelled by each flight into three categories. The categories are, short distance travel (SDT) for >=0 
 AND <= 2000 miles, intermediate distance travel (IDT) for >2000 AND <=6500, and long-distance travel (LDT) for >6500.
+select *, case 
+when distance_miles >=0 and distance_miles <= 2000 then 'short distance travel (SDT)'
+when distance_miles >2000 and distance_miles <= 6500 then 'intermediate distance travel (IDT)'
+when  distance_miles >6500 then 'long-distance travel (LDT)' end as categories
+from routes;
 
-![image](https://github.com/user-attachments/assets/e6d4ef5e-c048-477b-8340-a7c1a13bf494)
+# 15. Write a query to extract ticket purchase date, customer ID, class ID if the class is Business and Economy Plus, then complimentary services are given as Yes, else it is No.
+select p_date,customer_id,class_id, 
+case when class_id = 'Bussiness' or class_id = 'Economy Plus' then 'Yes' else 'No' end as complimentary_services 
+from ticket_details;
 
-17) Write a query to extract ticket purchase date, customer ID, class ID
- If the class is Business and Economy Plus, then complimentary services are given as Yes, else it is No
-
-![image](https://github.com/user-attachments/assets/0715e6e1-1974-4713-8d25-fff9118625dd)
-
-18) Write a query to extract the first record of the customer whose last name ends with Scott.
-
-![image](https://github.com/user-attachments/assets/ec980223-4ca8-4036-9095-24fd19734524)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# 16. Write a query to extract the first record of the customer whose last name ends with Scott.
+select * from customer
+where last_name = 'Scott';
