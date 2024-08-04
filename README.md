@@ -50,6 +50,35 @@
 
 ![image](https://github.com/user-attachments/assets/4d14e118-923f-498f-8ac2-03bd27436f23)
 
+14) Write a query to create a view with only business class customers along with the brand of airlines.
+
+![image](https://github.com/user-attachments/assets/b5de1d9f-f75e-41f4-b2d7-90edc802c370)
+
+15) Write a query to extracts all the details from the routes table where the travelled distance is more than 2000 miles.
+
+![image](https://github.com/user-attachments/assets/30b23a84-5286-43c8-b2d5-9f71f35913ff)
+
+16) Write a query to create a new column that shows the distance travelled by each flight into three categories.The categories are, short distance travel (SDT) for >=0 
+AND <= 2000 miles, intermediate distance travel (IDT) for >2000 AND <=6500, and long-distance travel (LDT) for >6500.
+
+![image](https://github.com/user-attachments/assets/e6d4ef5e-c048-477b-8340-a7c1a13bf494)
+
+17) Write a query to extract ticket purchase date, customer ID, class ID
+ If the class is Business and Economy Plus, then complimentary services are given as Yes, else it is No
+
+![image](https://github.com/user-attachments/assets/0715e6e1-1974-4713-8d25-fff9118625dd)
+
+18) Write a query to extract the first record of the customer whose last name ends with Scott.
+
+![image](https://github.com/user-attachments/assets/ec980223-4ca8-4036-9095-24fd19734524)
+
+
+
+
+
+
+
+
 
 
 
